@@ -1,0 +1,90 @@
+<h1>Etch a Sketch</h1>
+<hr />
+<button id="reset" onclick="eraseGrid()">Eraser</button>
+<button id="size" onclick="changeSize()">Change Size</button>
+<hr />
+<body>
+  <div id="container"></div>
+</body>
+
+<style>
+  h1 {
+    display: flex;
+    justify-content: center;
+  }
+  #container {
+    border: 1px solid magenta;
+    display: flex;
+    width: fit-content;
+    height: fit-content;
+  }
+  .grid-item {
+    border: 1px solid black;
+    width: 32px;
+    height: 32px;
+  }
+  .grid-item__hovered {
+    background-color: black;
+  }
+  .grid-column {
+    display: flex;
+    flex-direction: column;
+  }
+</style>
+
+<script>
+  function renderGrid(size = 16) {
+    let container = document.getElementById("container");
+    container.innerHTML = "";
+    for (let i = 0; i < size; i++) {
+      container.appendChild(createGridColumn(size));
+    }
+    document.querySelectorAll(".grid-item").forEach((ele) => {
+      ele.addEventListener("mouseover", () => changeGridItemColor(ele));
+    });
+  }
+
+  function createGridItem() {
+    let newDiv = document.createElement("div");
+    newDiv.classList.add("grid-item");
+    return newDiv;
+  }
+
+  function createGridColumn(size) {
+    let column = document.createElement("div");
+    column.classList.add("grid-column");
+    for (let i = 0; i < size; i++) {
+      column.appendChild(createGridItem());
+    }
+    return column;
+  }
+
+  function changeGridItemColor(ele) {
+    ele.classList.add("grid-item__hovered");
+  }
+
+  function eraseGrid() {
+    document.querySelectorAll(".grid-item__hovered").forEach((ele) => {
+      ele.classList.remove("grid-item__hovered");
+    });
+  }
+
+  function changeSize() {
+    let size = prompt("Enter a size:");
+    if (isNaN(Number(size))) {
+      alert("Please enter a number");
+      return;
+    }
+    if (size > 64) {
+      alert("Please make the size smaller than 64");
+      return;
+    }
+    if (size < 16) {
+      alert("Please make the size greater than 16");
+      return;
+    }
+    renderGrid(size);
+  }
+
+  renderGrid();
+</script>
